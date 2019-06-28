@@ -2,27 +2,33 @@ package br.com.crateus.ufc.eda.graph;
 
 import java.util.LinkedList;
 
-import br.com.crateus.ufc.eda.st.LinearProbingHashST;
+import br.com.crateus.ufc.eda.st.SeparateChainingHashingST;
 
-public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
+public class AdjacencyListGraph<T> implements Graph<T> {
 
 	private final int V;
+	private int INDEX;
 	private int E;
-	private LinearProbingHashST<T, LinkedList<T>> adj;
+	private SeparateChainingHashingST<T, Integer> labels;
+	private LinkedList<T>[] adj;
 
+	@SuppressWarnings("unchecked")
 	public AdjacencyListGraph(int V) {
 		this.V = V;
+		this.INDEX = 0;
 		this.E = 0;
-		this.adj = new LinearProbingHashST<T, LinkedList<T>>();
-		
-		for (Integer v = 0; v < V; v++) {
-			this.adj.put((T) v, new LinkedList<T>());
+		this.labels = new SeparateChainingHashingST<T, Integer>(V);
+		this.adj = (LinkedList<T>[]) new LinkedList[9];
+
+		for (int v = 0; v < V; v++) {
+			adj[v] = new LinkedList<T>();
 		}
+
 	}
 
 	@Override
 	public int countVertices() {
-		return V;
+		return INDEX;
 	}
 
 	@Override
@@ -32,17 +38,14 @@ public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
 
 	@Override
 	public int index(T v) {
-		return adj.getIndex(v);
+		return labels.get(v);
 	}
 
 	@Override
 	public T label(int index) {
-		int count = 0;
-
-		for (T v : adj.keys()) {
-			if (count == index)
+		for (T v : labels.keys()) {
+			if (labels.get(v) == index)
 				return v;
-			count++;
 		}
 
 		return null;
@@ -50,26 +53,32 @@ public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
 
 	@Override
 	public boolean contains(T v) {
-		return adj.contains(v);
+		return labels.contains(v);
 	}
 
 	@Override
 	public void addEdge(T v1, T v2) {
-		if(!adj.get(v1).contains(v2) && !adj.get(v2).contains(v1)) {
-			adj.get(v1).add(v2);
-			adj.get(v2).add(v1);
-			this.E++;
-		}
+		if (!labels.contains(v1))
+			labels.put(v1, INDEX++);
+
+		if (!labels.contains(v2))
+			labels.put(v2, INDEX++);
+
+		adj[labels.get(v1)].add(v2);
+		adj[labels.get(v2)].add(v1);
+
+		E++;
+
 	}
 
 	@Override
 	public Iterable<T> adjacents(T v) {
-		return adj.get(v);
+		return adj[labels.get(v)];
 	}
 
 	@Override
 	public int degree(T v) {
-		return adj.get(v).size();
+		return adj[labels.get(v)].size();
 	}
 
 }
