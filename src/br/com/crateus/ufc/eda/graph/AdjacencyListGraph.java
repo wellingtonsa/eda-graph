@@ -13,7 +13,8 @@ public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
 	public AdjacencyListGraph(int V) {
 		this.V = V;
 		this.E = 0;
-
+		this.adj = new LinearProbingHashST<T, LinkedList<T>>();
+		
 		for (Integer v = 0; v < V; v++) {
 			this.adj.put((T) v, new LinkedList<T>());
 		}
@@ -26,7 +27,7 @@ public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
 
 	@Override
 	public int countEdges() {
-		return adj.size() / 2;
+		return E;
 	}
 
 	@Override
@@ -54,9 +55,11 @@ public class AdjacencyListGraph<T extends Comparable<T>> implements Graph<T> {
 
 	@Override
 	public void addEdge(T v1, T v2) {
-		adj.get(v1).add(v2);
-		adj.get(v2).add(v1);
-		this.E++;
+		if(!adj.get(v1).contains(v2) && !adj.get(v2).contains(v1)) {
+			adj.get(v1).add(v2);
+			adj.get(v2).add(v1);
+			this.E++;
+		}
 	}
 
 	@Override

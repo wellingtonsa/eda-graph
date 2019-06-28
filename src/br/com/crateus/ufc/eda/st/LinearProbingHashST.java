@@ -1,12 +1,14 @@
 package br.com.crateus.ufc.eda.st;
 
+import java.util.LinkedList;
+
 public class LinearProbingHashST<K, V> implements ST<K, V> {
-	
+
 	int m;
-	
+
 	private K[] keys;
 	private V[] values;
-	
+
 	public LinearProbingHashST() {
 		this(97);
 	}
@@ -17,7 +19,7 @@ public class LinearProbingHashST<K, V> implements ST<K, V> {
 		this.keys = (K[]) new Object[m];
 		this.values = (V[]) new Object[m];
 	}
-	
+
 	private int hash(K key) {
 		return (key.hashCode() & 0x7fffffff) % m;
 	}
@@ -25,15 +27,17 @@ public class LinearProbingHashST<K, V> implements ST<K, V> {
 	@Override
 	public void put(K key, V value) {
 		int i = hash(key);
-		while (keys[i] != null && !key.equals(keys[i])) i = (i + 1) % m;
+		while (keys[i] != null && !key.equals(keys[i]))
+			i = (i + 1) % m;
 		keys[i] = key;
-		values[i] = value; 
+		values[i] = value;
 	}
 
 	@Override
 	public V get(K key) {
 		int i = hash(key);
-		while (keys[i] != null && !key.equals(keys[i])) i = (i + 1) % m;
+		while (keys[i] != null && !key.equals(keys[i]))
+			i = (i + 1) % m;
 		return values[i];
 	}
 
@@ -53,18 +57,25 @@ public class LinearProbingHashST<K, V> implements ST<K, V> {
 
 	@Override
 	public int size() {
-		return keys.length;
+		for(int i = 0; i < keys.length; i++) {
+			if(keys[i] == null)
+				return i;
+		}
+		return 0;
 	}
 
 	@Override
 	public Iterable<K> keys() {
-		return null;
+		LinkedList<K> ll = new LinkedList<K>();
+		for (int i = 0; i < keys.length; i++)
+			ll.add(keys[i]);
+		return ll;
 	}
 
 	@Override
 	public int getIndex(K key) {
-		for(int i = 0; i < keys.length; i++) {
-			if(keys[i] == key)
+		for (int i = 0; i < keys.length; i++) {
+			if (keys[i] == key)
 				return i;
 		}
 		return 0;
