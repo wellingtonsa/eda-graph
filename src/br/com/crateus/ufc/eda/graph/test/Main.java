@@ -2,6 +2,8 @@ package br.com.crateus.ufc.eda.graph.test;
 
 import br.com.crateus.ufc.eda.graph.AdjacencyListGraph;
 import br.com.crateus.ufc.eda.graph.AdjacencyMatrixGraph;
+import br.com.crateus.ufc.eda.graph.search.BreadthFirstPaths;
+import br.com.crateus.ufc.eda.graph.utils.GraphUtils;
 
 public class Main {
 
@@ -14,7 +16,6 @@ public class Main {
 		graph.addEdge("Antonio", "Paulo");
 		graph.addEdge("Joao","Paulo");
 		graph.addEdge("Maria","Antonio");
-		
 		
 		// retorna o n´umero de v´ertices do grafo
 		System.out.println(graph.countVertices());
@@ -36,6 +37,9 @@ public class Main {
 		
 		//retorna o grau do vértice v
 		System.out.println(graph.degree("Maria"));
+		
+		//encontra o menor caminho, em n´umero de arestas, entre os vértices v1 e v2, usando BFS.
+		System.out.println(graph.shortestPath("Joao", "Paulo"));
 	}
 
 }

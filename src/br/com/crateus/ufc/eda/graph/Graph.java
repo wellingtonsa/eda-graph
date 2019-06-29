@@ -16,4 +16,6 @@ public interface Graph<T> {
 	Iterable<T> adjacents(T v);
 
 	int degree(T v);
+	
+	int shortestPath(T v1, T v2);
 }

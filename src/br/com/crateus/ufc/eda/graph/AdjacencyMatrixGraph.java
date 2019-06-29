@@ -1,7 +1,9 @@
 package br.com.crateus.ufc.eda.graph;
 
 import java.util.LinkedList;
+import java.util.Stack;
 
+import br.com.crateus.ufc.eda.graph.utils.GraphUtils;
 import br.com.crateus.ufc.eda.st.SeparateChainingHashingST;
 
 public class AdjacencyMatrixGraph<T extends Comparable<T>> implements Graph<T> {
@@ -84,6 +86,11 @@ public class AdjacencyMatrixGraph<T extends Comparable<T>> implements Graph<T> {
 	public int degree(T v) {
 		LinkedList<T> vs = (LinkedList<T>) adjacents(v);
 		return vs.size();
+	}
+
+	@Override
+	public int shortestPath(T v1, T v2) {
+		return ((Stack<T>) GraphUtils.shortestPath(this, v1, v2)).size() - 1;
 	}
 
 //	private void showMatrix() {
