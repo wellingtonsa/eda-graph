@@ -20,7 +20,7 @@ public class AdjacencyListGraph<T> implements Graph<T> {
 		this.INDEX = 0;
 		this.E = 0;
 		this.labels = new SeparateChainingHashingST<T, Integer>(V);
-		this.adj = (LinkedList<T>[]) new LinkedList[9];
+		this.adj = (LinkedList<T>[]) new LinkedList[V];
 
 		for (int v = 0; v < V; v++) {
 			adj[v] = new LinkedList<T>();

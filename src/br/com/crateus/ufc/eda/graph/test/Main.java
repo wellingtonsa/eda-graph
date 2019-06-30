@@ -1,14 +1,16 @@
 package br.com.crateus.ufc.eda.graph.test;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import br.com.crateus.ufc.eda.graph.AdjacencyListGraph;
-import br.com.crateus.ufc.eda.graph.AdjacencyMatrixGraph;
-import br.com.crateus.ufc.eda.graph.search.BreadthFirstPaths;
+import br.com.crateus.ufc.eda.graph.search.ConnectedComponents;
 import br.com.crateus.ufc.eda.graph.utils.GraphUtils;
 
 public class Main {
 
 	public static void main(String[] args) {
-		AdjacencyListGraph<String> graph = new AdjacencyListGraph<String>(4);
+		AdjacencyListGraph<String> graph = new AdjacencyListGraph<String>(6);
 		//AdjacencyMatrixGraph<String> graph = new AdjacencyMatrixGraph<String>(4);
 		
 		//adiciona uma aresta entre os vértices v1 e v2
@@ -16,11 +18,13 @@ public class Main {
 		graph.addEdge("Antonio", "Paulo");
 		graph.addEdge("Joao","Paulo");
 		graph.addEdge("Maria","Antonio");
+		//graph.addEdge("Jose","Josa");
+		//graph.addEdge("Josa","Jose");
 		
-		// retorna o n´umero de v´ertices do grafo
+		// retorna o número de vértices do grafo
 		System.out.println(graph.countVertices());
 		
-		// retorna o n´umero de arestas do grafo
+		// retorna o número de arestas do grafo
 		System.out.println(graph.countEdges());
 		
 		//retorna o indice do vértice v, que indica, na sequências de inserções, a posição de inserção do vértice
@@ -40,6 +44,20 @@ public class Main {
 		
 		//encontra o menor caminho, em n´umero de arestas, entre os vértices v1 e v2, usando BFS.
 		System.out.println(graph.shortestPath("Joao", "Paulo"));
+		
+		
+		//lê o grafo de um arquivo movies.txt
+		try {
+			AdjacencyListGraph<String> graph2 = (AdjacencyListGraph<String>) GraphUtils.readFromFile(new FileInputStream("movies.txt"), ",");
+			// retorna o número de vértices do grafo
+			System.out.println(graph2.countVertices());
+			
+			ConnectedComponents<String> cc = new ConnectedComponents<String>(graph2);
+			// retorna o numero de componentes conexas do grafo
+			System.out.println(cc.count());
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
